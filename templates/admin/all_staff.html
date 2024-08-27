@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks-Entry-App</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="../../static/Admin.css">
+
+</head>
+
+<body>
+    <div>
+        <nav class="navbar fixed-top navbar-expand navbar-light d-float navbar-custom">
+            <div class="d-flex justify-content-between d-block">
+                <button class="btn px-1 py-0 open-btn me-2"><img src="../../static/Pictures/menu (1).png" alt="Nav"
+                        style="width: 30px;"></button>
+            </div>
+            <a id="name" class="navbar-brand" href="#"><img class="logo" src="../../static/Pictures/logo.png"
+                    alt="logo">Marks-Entry-App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" style="margin-right: 10px;" id="navbarNav">
+                <button type="button" id="loginBtn" class="btn btn-danger d-table float-right"
+                    style="align-self: flex-end;">Log Out</button>
+            </div>
+        </nav>
+    </div>
+    <div class="content d-flex" style="display: flex;">
+        <div class="sidebar" id="side_nav">
+            <ul class="list-unstyled px-2">
+                <li><a href="./Admin.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i>
+                        Home</a></li>
+                <li><a href="./courses.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i>
+                        Courses</a></li>
+                <li><a href="./subject.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i>
+                        Subjects</a></li>
+                <li><a href="./group.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i>
+                        Groups</a></li>
+                <li><a href="./all_students.html" class="text-decoration-none px-3 py-2 d-block"><i
+                            class="fal fa-list"></i>
+                        All Students</a></li>
+                <li class="active"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i
+                            class="fal fa-list"></i> All staff</a></li>
+            </ul>
+            <hr class="h-color mx-2" style="color: aliceblue;">
+        </div>
+
+        <div class="dashboard-content Main_window d-flex align-items-center px-3 pt-4" style="flex-direction: column;">
+            <div class="pt-4 d-flex flex-column align-items-center">
+                <h2>All Staff</h2>
+
+                <div class="d-flex flex-column p-2 mt-3 justify-content-center align-items-center"
+                    style="border: 1px rgb(238, 206, 206) solid; border-radius: 5px; background-color: white;">
+                    <div class="pt-2" style="overflow-x: scroll;">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Employee ID</th>
+                                    <th scope="col">Staff Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Course Name</th>
+                                    <th scope="col">Role</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studentlist">
+                                <!-- Students without course will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="outcontainer mt-3 border-2 bg-white">
+                    <div class="container mt-3">
+                        <form id="loginForm">
+                            <div class="form-group">
+                                <label for="loginEmail" class="pb-1">Email :</label>
+                                <input type="email" class="form-control" id="loginEmail" placeholder="Email"
+                                    name="email" required />
+                                <div id="evalid" style="color: red;"></div>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label for="courseselect" class="pb-1">Select a Course: </label>
+                                <select id="courseselect" class="form-select" aria-label="Default select example">
+                                    <option selected disabled>Select Course</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group mt-4">
+                                <label for="roleselect" class="pb-1">Select a Role: </label>
+                                <select id="roleselect" class="form-select" aria-label="Default select example">
+                                    <option selected disabled>Select Role</option>
+                                    <option value="staff">staff</option>
+                                    <option value="coordinator">coordinator</option>
+                                    <option value="admin">admin</option>
+                                </select>
+                            </div>
+                            <div class="d-flex flex-column">
+                                <button id="save" class="btn btn-success m-2" style="align-self: center;">Save</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../static/Admin.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const token = JSON.parse(localStorage.getItem("token"));
+            let selectedCourseId;
+            let selectedCourseName;
+            let coursesData = [];
+            let selectedStaffID;
+
+            async function getCourse() {
+                try {
+                    const response1 = await fetch('http://127.0.0.1:5000/course', {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    });
+                    const courses = await response1.json();
+
+                    coursesData = courses.data;
+
+                    let courselist = document.getElementById("courseselect");
+                    courselist.innerHTML = '';
+
+                    // Add the default "Select Course" option
+                    let defaultOption = document.createElement('option');
+                    defaultOption.selected = true;
+                    defaultOption.disabled = true;
+                    defaultOption.innerText = "Select Course";
+                    courselist.appendChild(defaultOption);
+
+                    // Add course options
+                    courses.data.forEach(course => {
+                        let option = document.createElement('option');
+                        option.value = course.course_id;
+                        option.innerText = course.course_name;
+                        courselist.appendChild(option);
+                    });
+
+                    console.log("Courses data:", coursesData);
+                } catch (error) {
+                    console.error('Error fetching courses:', error);
+                }
+            }
+
+
+            async function getStaff() {
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/staff", {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    });
+                    const data = await response.json();
+
+                    let studentlist = document.getElementById("studentlist");
+                    studentlist.innerHTML = '';
+
+                    data.data.forEach(student => {
+                        let row = document.createElement('tr');
+                        row.innerHTML = `
+                    <td>${student.staff_id}</td>
+                    <td>${student.staff_name}</td>
+                    <td>${student.email}</td>
+                    <td>${student.course_name}</td>
+                    <td>${student.role}</td>
+                `;
+                        studentlist.appendChild(row);
+                    });
+                } catch (error) {
+                    console.error('Error fetching staff:', error);
+                }
+            }
+
+            document.getElementById("loginEmail").addEventListener("blur", async function () {
+                const email = this.value;
+                try {
+                    const response = await fetch(`http://127.0.0.1:5000/staff`, {
+                        headers: {
+                            "Authorization": "Bearer " + token
+                        }
+                    });
+                    const data = await response.json();
+                    const staff = data.data.find(staff => staff.email === email);
+
+                    if (staff) {
+                        selectedStaffID = staff.staff_id;
+                        console.log('Staff ID:', selectedStaffID);
+                    } else {
+                        console.log('Staff not found');
+                    }
+                } catch (error) {
+                    console.error('Error fetching staff:', error);
+                }
+            });
+
+            document.getElementById('save').addEventListener("click", async function save(e) {
+                e.preventDefault();
+                try {
+                    if (!selectedCourseId) {
+                        console.log(`No course selected for staff ${selectedStaffID}`);
+                        return;
+                    }
+
+                    console.log("Selected course ID:", selectedCourseId);
+                    selectedCourseName = coursesData.find(course => course.course_id == selectedCourseId)?.course_name;
+                    console.log(`Selected course name for ${selectedStaffID} is: `, selectedCourseName);
+                    selectedRole = document.getElementById('roleselect').value;
+
+                    if (!selectedCourseName) {
+                        console.log(`No course name found for ${selectedStaffID} course ID ${selectedCourseId}`);
+                        return;
+                    }
+
+                    if (!selectedRole) {
+                        console.log(`No role selected for staff ${selectedStaffID}`);
+                        return;
+                    }
+
+                    const response = await fetch(`http://127.0.0.1:5000/staff/${selectedStaffID}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',           
+                            "Authorization" : "Bearer " + token
+                        },
+                        body: JSON.stringify({
+                            "course_name": selectedCourseName,
+                            "role": selectedRole
+                        }),
+                    });
+
+                    if (response.ok) {
+                        console.log(`Successfully updated course ${selectedCourseName} for staff ${selectedStaffID}`);
+                        await getStaff();
+                    } else {
+                        console.error(`Failed to update course ${selectedCourseName} for staff ${selectedStaffID}`);
+                    }
+                } catch (error) {
+                    console.error('Error saving staff selection:', error);
+                }
+            });
+
+
+            document.getElementById("courseselect").addEventListener("change", function () {
+                selectedCourseId = this.value;
+                console.log("Course selected:", selectedCourseId);
+            });
+
+            await getStaff();
+            await getCourse();
+        });
+
+
+    </script>
+</body>
+
+</html>

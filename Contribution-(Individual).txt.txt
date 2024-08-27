@@ -1,0 +1,18 @@
+************Contribution:-*************
+
+Frontend, Backend (api + database) :- Sumit Ratnakar Rajam (Individual)
+
+***************************************
+
+
+************Personal Info**************
+
+Student Name:- Sumit Ratnakar Rajam.
+Roll. no. :- 85617
+College Name:- Finolex Academy of Management and Technology, Ratnagiri
+
+***************************************
+
+
+New corrections:- 	1. All form validations on submit. (Tostr)
+			2. Corrected query of students show marks. (added "and approved = 1" in old sql query)

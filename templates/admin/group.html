@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marks-Entry-App</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+    <link rel="stylesheet" href="../../static/Admin.css">
+
+</head>
+
+<body>
+    <div class="">
+        <nav class="navbar fixed-top navbar-expand navbar-light d-float navbar-custom">
+            <div class="d-flex justify-content-between d-block">
+                <button class="btn px-1 py-0 open-btn me-2"><img src="../../static/Pictures/menu (1).png" alt="Nav"
+                        style="width: 30px;"></button>
+            </div>
+            <a id="name" class="navbar-brand" href="#"><img class="logo"
+                    src="../../static/Pictures/logo.png"
+                    alt="logo">Marks-Entry-App</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" style="margin-right: 10px;" id="navbarNav">
+                <button type="button" id="loginBtn" class="btn btn-danger d-table float-right"
+                    style="align-self: flex-end;">Log Out</button>
+            </div>
+        </nav>
+    </div>
+    <div class="content d-flex" style="display: flex;">
+        <div class="sidebar" id="side_nav">
+            <ul class="list-unstyled px-2">
+                <li><a href="./Admin.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i> Home</a></li>
+                <li><a href="./courses.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i> Courses</a></li>
+                <li><a href="./subject.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i> Subjects</a></li>
+                <li class="active"><a href="#" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i> Groups</a></li>
+                <li><a href="./all_students.html" class="text-decoration-none px-3 py-2 d-block"><i class="fal fa-list"></i>
+                    All Students</a></li>
+            <li><a href="./all_staff.html" class="text-decoration-none px-3 py-2 d-block"><i
+                        class="fal fa-list"></i> All staff</a></li>
+            </ul>
+            <hr class="h-color mx-2" style="color: aliceblue;">
+
+        </div>
+
+        <div class="dashboard-content Main_window d-flex align-items-center px-3 pt-4"
+            style="flex-direction: column ;">
+            <div class="pt-4 d-flex flex-column align-items-center">
+                <h2>Show Groups</h2>
+                <div class="Coursesbox d-flex p-2 mt-3"
+                    style="flex-direction: column; background-color: rgb(255, 255, 255); border: 2px rgb(229, 190, 190) solid; border-radius: 5px;">
+                    <div class="d-flex p-2 mb-3 justify-content-center align-items-center"
+                        style="border: 1px rgb(238, 206, 206) solid; border-radius: 5px;">
+                        <span class="p-2" style="flex-wrap: wrap;">Select Course: </span>
+                        <div class="form-group">
+                            <select id="courseselect" class="form-select" aria-label="Default select example">
+                                <option selected disabled>Select Course</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex p-2 justify-content-center align-items-center"
+                        style="border: 1px rgb(238, 206, 206) solid; border-radius: 5px;">
+                        <span class="p-2" style="flex-wrap: wrap;">Add Group: </span>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="input_group" placeholder="Subject Name"
+                                required />
+                        </div>
+                        <button type="button" id="add" class="btn btn-outline-warning"
+                            style="max-height: 40px; margin-left: 5px;">Add</button>
+                    </div>
+
+                    <div class="d-flex flex-column p-2 mt-3 justify-content-center align-items-center"
+                        style="border: 1px rgb(238, 206, 206) solid; border-radius: 5px;">
+                        <h5>Groups</h5>
+                        <div class="pt-2">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subjectlist"><tr><td> PLease Select a Course<td><tr></tbody>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript" src="../../static/Admin.js">s</script>
+    <script>
+
+        // async function editCourse(courseId, courseName, courseDescription) {
+        //     let newCourseName = prompt("Enter new course name:", courseName);
+        //     let newDescription = prompt("Enter new course id:", courseDescription);
+
+        //     if (newCourseName && newDescription) {
+        //         const response = await fetch(`http://127.0.0.1:5000/subject/${courseId}`, {
+        //             method: "PUT",
+        //             body: JSON.stringify({
+        //                 "subject_name": courseName,
+        //                 "course_id": newDescription,
+        //             }),
+        //             headers: { "Content-type": "application/json; charset=UTF-8" }
+        //         });
+        //         const data = await response.json();
+        //         if (data.status === "success") {
+        // let e = document.querySelector("#subjectlist");
+        //     e.innerHTML = "";
+        //     getSubject(selectedCourseId);
+        //         }
+        //     }
+        // }
+
+        // async function deleteCourse(courseId) {
+        //     const response = await fetch(`http://127.0.0.1:5000/course/${courseId}`, {
+        //         method: "DELETE"
+        //     });
+        //     const data = await response.json();
+        //     if (data.status === "success") {
+        //         let rowToRemove = document.getElementById(`course_row_${courseId}`);
+        //         if (rowToRemove) {
+        //             rowToRemove.remove();
+        //         }
+        //     }
+        // }
+
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let selectedCourseId;
+            let coursesData = [];
+            const token = JSON.parse(localStorage.getItem("token"));
+
+            // Fetch and populate courses
+            async function getCourse() {
+                const response1 = await fetch('http://127.0.0.1:5000/course',{headers: {
+                            "Authorization" : "Bearer " + token
+                        }});
+                const courses = await response1.json();
+
+                let courselist = document.getElementById("courseselect");
+
+                courses.data.forEach(course => {
+                    let row = document.createElement('option');
+                    row.setAttribute('id', `course_${course.course_id}`);
+                    row.innerText = `${course.course_name}`;
+                    courselist.appendChild(row);
+                });
+                coursesData = courses.data;
+            }
+
+            async function getSubject(course_id) {
+                const response1 = await fetch(`http://127.0.0.1:5000/group/${course_id}`, {headers: {
+                            "Authorization" : "Bearer " + token
+                        }});
+                const subjects = await response1.json();
+
+                let subjectlist = document.getElementById("subjectlist");
+                subjectlist.innerHTML = "";
+
+                subjects.data.forEach(group => {
+                    let row = document.createElement('tr');
+                    row.setAttribute('id', `subject_row_${group.group_id}`);
+
+                    let nameCell = document.createElement('td');
+                    nameCell.textContent = group.group_name;
+
+                    let actionCell = document.createElement('td');
+
+                    let editButton = document.createElement('button');
+                    editButton.textContent = 'Edit';
+                    editButton.className = 'btn btn-warning btn-sm me-2';
+                    // editButton.addEventListener('click', () => editCourse(group.group_id, group.group_name, group.course_id));
+
+                    let deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.className = 'btn btn-danger btn-sm';
+                    // deleteButton.addEventListener('click', () => deleteCourse(group.group_id));
+
+                    actionCell.appendChild(editButton);
+                    actionCell.appendChild(deleteButton);
+
+                    row.appendChild(nameCell);
+                    row.appendChild(actionCell);
+
+                    subjectlist.appendChild(row);
+                });
+            }
+
+            function getCourseID() {
+                let selectedCourseName = courseSelectElement.value;
+                let selectedCourse = coursesData.find(course => course.course_name === selectedCourseName);
+                if (selectedCourse) {
+                    selectedCourseId = selectedCourse.course_id;
+                    console.log(`Selected Course ID: ${selectedCourseId}`);
+                    getSubject(selectedCourseId);
+                }
+            }
+
+            let addSubject = document.getElementById('add');
+            addSubject.addEventListener("click", async (e) => {
+                e.preventDefault();
+                let subject = document.getElementById('input_group');
+                console.log(subject.value);
+                if (subject.value.length != 0) {
+                    const response = await fetch("http://127.0.0.1:5000/group", {
+                        method: "POST",
+                        body: JSON.stringify({ "group_name": subject.value, "course_id": selectedCourseId }),
+                        headers: { "Content-type": "application/json; charset=UTF-8" , 
+                            "Authorization" : "Bearer " + token
+                        }
+                    });
+                    const data = await response.json();
+                    if (data.status === "success") {
+                        getSubject(selectedCourseId);
+                        subject.value = '';
+                    }
+                }
+            });
+
+            // Initialize the course selection and subject list
+            getCourse();
+            let courseSelectElement = document.getElementById("courseselect");
+            courseSelectElement.addEventListener("change", getCourseID);
+        });
+
+    </script>
+</body>
+
+</html>
